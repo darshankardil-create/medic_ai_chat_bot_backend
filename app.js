@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-socketconnection();
+socketconnection(app);
 
 const port = process.env.PORT;
 

@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import http from "http";
 import { handleuserquery } from "./mainfunction.js";
 
-export function socketconnection() {
+export function socketconnection(app) {
   const httpserver = http.createServer(app);
 
   const port = process.env.SOCKETPORT;
