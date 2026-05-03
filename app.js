@@ -7,9 +7,9 @@ import { connectDB } from "./src/configdb.js";
 
 dotenv.config();
 
-socketconnection();
-
 const app = express();
+
+socketconnection();
 
 const port = process.env.PORT;
 
