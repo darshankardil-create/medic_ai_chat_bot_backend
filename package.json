@@ -1,0 +1,28 @@
+{
+  "name": "medic-ai-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch ./app.js",
+    "start": "node ./app.js",
+    "seed": "node --watch ./seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@huggingface/inference": "^4.13.15",
+    "@langchain/textsplitters": "^1.0.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "lodash": "^4.18.1",
+    "mongoose": "^9.6.1",
+    "pdf-parse-new": "^2.1.0",
+    "socket.io": "^4.8.3"
+  }
+}
