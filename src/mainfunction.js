@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { maindatasrccollec } from "./Schema.js";
 import { InferenceClient } from "@huggingface/inference";
 
-export async function handleuserquery(userQ) {
+export async function handleuserquery(userQ, history = null) {
   try {
     await connectDB();
 
@@ -37,24 +37,52 @@ export async function handleuserquery(userQ) {
 
     //textmodel input of vector search result and raw user query
 
-    const textmodelconfig = {
-      model: "openai/gpt-oss-120b:fastest",
-      messages: [
-        {
-          role: "system",
-          content: `
+    let textmodelconfig;
+
+    if (history) {
+      console.log(history);
+
+      textmodelconfig = {
+        model: "openai/gpt-oss-120b:fastest",
+        messages: [
+          {
+            role: "system",
+            content: `
 You are a medical assistant for question-answering tasks.
 Use the following pieces of retrieved context to answer the question.
 If you don't know the answer, say “Sorry, I can't help you with that. I can only answer based on the information I have.”.
 Use three sentences maximum and keep the answer concise.
 `,
-        },
-        {
-          role: "user",
-          content: `question:${userquery} context from which you want to refer for answering the user questions:${results.map((i) => i.text).join("end of this chunk")}`,
-        },
-      ],
-    };
+          },
+
+          ...history,
+
+          {
+            role: "user",
+            content: `question:${userquery} context from which you want to refer for answering the user questions:${results.map((i) => i.text).join("end of this chunk")}`,
+          },
+        ],
+      };
+    } else {
+      textmodelconfig = {
+        model: "openai/gpt-oss-120b:fastest",
+        messages: [
+          {
+            role: "system",
+            content: `
+You are a medical assistant for question-answering tasks.
+Use the following pieces of retrieved context to answer the question.
+If you don't know the answer, say “Sorry, I can't help you with that. I can only answer based on the information I have.”.
+Use three sentences maximum and keep the answer concise.
+`,
+          },
+          {
+            role: "user",
+            content: `question:${userquery} context from which you want to refer for answering the user questions:${results.map((i) => i.text).join("end of this chunk")}`,
+          },
+        ],
+      };
+    }
 
     //textmodel output
 

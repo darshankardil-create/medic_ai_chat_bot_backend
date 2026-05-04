@@ -2,12 +2,16 @@ import mongoose from "mongoose";
 import { type } from "os";
 import bcrypt from "bcrypt";
 
+//vector embedded collections
+
 const dataSchema = new mongoose.Schema({
   vector: [Number],
   text: String,
 });
 
 export const maindatasrccollec = mongoose.model("maindatachunks", dataSchema);
+
+// form collection
 
 const auth = new mongoose.Schema({
   username: {
@@ -32,3 +36,20 @@ auth.methods.comparepass = async function (loginpass) {
 };
 
 export const authmodel = mongoose.model("userinfo", auth);
+
+//chat history collection
+
+const chatsrecord = new mongoose.Schema(
+  {
+    username: String,
+    chathistoryofuser: [
+      {
+        type: String,
+        content: String,
+      },
+    ],
+  },
+  { timestamps: true },
+);
+
+export const chatmodel = mongoose.model("chathistory", chatsrecord);

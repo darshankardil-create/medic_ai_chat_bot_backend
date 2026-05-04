@@ -1,24 +1,16 @@
-import { Server } from "socket.io";
-import http from "http";
 import { handleuserquery } from "./mainfunction.js";
 
-export function socketconnection(app) {
-  const httpserver = http.createServer(app);
-
-  const port = process.env.SOCKETPORT;
-
-  httpserver.listen(port, () => {
-    console.log("socket server is live on port:", port);
-  });
-
-  const io = new Server(httpserver, {
-    cors: ["*"],
-  });
-
+export function socketconnection(io) {
   io.on("connection", (socket) => {
     console.log("user with id:", socket.id, "connected successfull via socket");
+    //get history from user as parameter
+    socket.on("proceedans", async (userq, history = null) => {
+      if (history) {
+        const answer = await handleuserquery(userq, history);
+        socket.emit("getanswer", answer);
+        return;
+      }
 
-    socket.on("proceedans", async (userq) => {
       const answer = await handleuserquery(userq);
       socket.emit("getanswer", answer);
     });

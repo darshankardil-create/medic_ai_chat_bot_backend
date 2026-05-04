@@ -4,17 +4,19 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { socketconnection } from "./src/socket.js";
 import { connectDB } from "./src/configdb.js";
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 
 const app = express();
 
-socketconnection(app);
+app.use(express.json());
 
-const port = process.env.PORT;
+app.use("/", (req, res, next) => {
+  console.log("got", req.method, "req");
 
-app.listen(port, () => {
-  console.log("server is live on port", port);
+  next();
 });
 
 app.use(
@@ -23,18 +25,22 @@ app.use(
   }),
 );
 
-app.use(express.json());
-
-app.use("/",(req,res,next) => {
-console.log("got",req.method,"req")
-next()
-})
-
 connectDB().then(() => {
+  app.use("/", router);
+});
 
+const httpserver = http.createServer(app);
 
+const port = process.env.PORT;
 
-app.use("/", router);
-})
+httpserver.listen(port, () => {
+  console.log("server is live on port:", port);
+});
+
+const io = new Server(httpserver, {
+  cors: ["*"],
+});
+
+socketconnection(io);
 
 
