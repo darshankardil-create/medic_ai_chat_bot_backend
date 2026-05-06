@@ -18,7 +18,7 @@ async function splitandfeedvectorindb() {
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
-      chunkOverlap: 170,
+      chunkOverlap: 180,
     });
 
     const data = fs.readFileSync("./src/files/Encyclopedia-of-Medicine.pdf");
@@ -44,13 +44,14 @@ async function splitandfeedvectorindb() {
 
     const arrayplus = [];
 
-    const dividedarr = _.chunk(chunks, 400);
+    const dividedarr = _.chunk(chunks, 180);
 
     let arrayplusStatus = true;
 
     for (let [ind, chunk] of dividedarr.entries()) {
       const embeddingobj = {
-        model: "google/embeddinggemma-300m",
+        // model: "google/embeddinggemma-300m",
+        model: "BAAI/bge-large-en-v1.5",
         inputs: chunk,
         provider: "hf-inference",
       };
@@ -68,7 +69,7 @@ async function splitandfeedvectorindb() {
           arrayplus.push(...embeddedtext);
 
           console.log(
-            `element no: ${ind + 1} embedded successfully out of total: ${dividedarr.length} at attempt No: ${attempt} with the help of chunking statigy`,
+            `element no: ${ind + 1} embedded successfully out of total: ${dividedarr.length} at attempt No: ${attempt} with the help of chunking strategy`,
           );
 
           status = true;
@@ -81,7 +82,7 @@ async function splitandfeedvectorindb() {
         }
       }
 
-      if (attempt <= 60 && !status) {
+      if (attempt === 60 && !status) {
         //break if last attemt and still not successed
         arrayplusStatus = false;
         break;
@@ -90,7 +91,7 @@ async function splitandfeedvectorindb() {
 
     if (!arrayplusStatus) {
       //                       ^^^^^
-      console.log("Embedding failed after 60 attemts !!!");
+      console.log("Embedding failed after 60 attemts !!!!");
       return;
     }
 

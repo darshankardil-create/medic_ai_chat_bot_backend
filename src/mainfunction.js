@@ -14,7 +14,7 @@ export async function handleuserquery(userQ, history = null) {
     //vector embedding of user query
 
     const embeddingobj = {
-      model: "google/embeddinggemma-300m",
+      model: "BAAI/bge-large-en-v1.5",
       inputs: userquery,
       provider: "hf-inference",
     };
@@ -92,6 +92,6 @@ Use three sentences maximum and keep the answer concise.
   } catch (error) {
     return error.message + " " + "error";
   } finally {
-    mongoose.disconnect();
+    // mongoose.disconnect();
   }
 }

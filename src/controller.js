@@ -24,6 +24,57 @@ export async function signin(req, res) {
   }
 }
 
+export async function deletechat(req, res) {
+  try {
+    const deleteparticularchat = await chatmodel.findByIdAndDelete(
+      req.params.id,
+    );
+
+    if (!deleteparticularchat) {
+      return res
+        .status(404)
+        .json({ message: `chat id:${req.params.id} doesnt exist in db` });
+    }
+
+    res
+      .status(200)
+      .json({
+        message: `successfully deleted chat id:${req.params.id} from chat history`,
+      });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+    console.log(error);
+  }
+}
+
+export async function updatechathistory(req, res) {
+  try {
+    const updatechathistory = await chatmodel.findByIdAndUpdate(
+      req.params.id,
+      req.body.updateddata,
+      {
+        returnDocument: "after",
+      },
+    );
+
+    if (!updatechathistory) {
+      return res.status(404).json({
+        message: `id : ${req.params.id} not found to update chat history`,
+      });
+    }
+
+    res.status(200).json({
+      message: "successfully updated the chat history",
+      updated: updatechathistory,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+
+    console.log(error);
+  }
+}
+
 export async function getmyallchats(req, res) {
   try {
     const getmychathistory = await chatmodel.find({
@@ -32,7 +83,10 @@ export async function getmyallchats(req, res) {
 
     res.status(200).json({
       message: `successfully found all chathistor of ${req.params.username}`,
-      getmychathistory: getmychathistory.map((i) => i.chathistoryofuser),
+      getmychathistory: getmychathistory.map((i) => {
+        //id to update chat history via updatechathistory
+        return { chatdata: i.chathistoryofuser, id: i._id };
+      }),
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -118,8 +172,6 @@ export async function login(req, res) {
       const token = jwt.sign({ id: find._id }, process.env.JWTSE, {
         expiresIn: "30d",
       });
-
-      console.log(token);
 
       res.status(200).json({ message: "authorised user", token: token });
     } else {
