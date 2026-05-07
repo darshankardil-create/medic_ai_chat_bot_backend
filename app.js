@@ -21,7 +21,7 @@ app.use("/", (req, res, next) => {
 
 app.use(
   cors({
-    origins: ["*"],
+    origins: ["https://medicaichatbotfrontend.vercel.app"]
   }),
 );
 
@@ -38,7 +38,7 @@ httpserver.listen(port, () => {
 });
 
 const io = new Server(httpserver, {
-  cors: ["*"],
+  cors: ["https://medicaichatbotfrontend.vercel.app"]
 });
 
 socketconnection(io);
