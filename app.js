@@ -6,6 +6,7 @@ import { socketconnection } from "./src/socket.js";
 import { connectDB } from "./src/configdb.js";
 import { Server } from "socket.io";
 import http from "http";
+import { ratelimiter } from "./src/ratelimit.js";
 
 dotenv.config();
 
@@ -21,12 +22,14 @@ app.use("/", (req, res, next) => {
 
 app.use(
   cors({
-    origins: ["https://medicaichatbotfrontend.vercel.app"]
+    origins: ["https://medicaichatbotfrontend.vercel.app"],
   }),
 );
 
 connectDB().then(() => {
-  app.use("/", router);
+  app.set("trust proxy", 1);
+
+  app.use("/", ratelimiter, router);
 });
 
 const httpserver = http.createServer(app);
@@ -38,7 +41,7 @@ httpserver.listen(port, () => {
 });
 
 const io = new Server(httpserver, {
-  cors: ["https://medicaichatbotfrontend.vercel.app"]
+  cors: ["https://medicaichatbotfrontend.vercel.app"],
 });
 
 socketconnection(io);
