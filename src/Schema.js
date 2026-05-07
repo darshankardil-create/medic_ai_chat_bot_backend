@@ -44,7 +44,9 @@ const chatsrecord = new mongoose.Schema(
     username: String,
     chathistoryofuser: [
       {
-        type: String,
+        type: {
+          type: String,
+        },
         content: String,
       },
     ],

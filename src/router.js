@@ -8,7 +8,7 @@ import {
   getmyaccinfo,
   getmyallchats,
   updatechathistory,
-  deletechat
+  deletechat,
 } from "./controller.js";
 
 const router = express.Router();
@@ -21,12 +21,11 @@ router.get("/gettokenpayload", gettokenpayload);
 router.delete("/deleteacandchats/:id/:username", deleteacandchats);
 router.get("/getmyaccinfo/:id", getmyaccinfo);
 
-
 //chat history req handlers
 
 router.post("/savechats", savechats);
 router.get("/getmyallchats/:username", getmyallchats);
 router.put("/updatechathistory/:id", updatechathistory);
-router.delete("/deletechat/:id",deletechat)
+router.delete("/deletechat/:id", deletechat);
 
 export default router;

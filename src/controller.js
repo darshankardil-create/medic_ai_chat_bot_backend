@@ -36,11 +36,9 @@ export async function deletechat(req, res) {
         .json({ message: `chat id:${req.params.id} doesnt exist in db` });
     }
 
-    res
-      .status(200)
-      .json({
-        message: `successfully deleted chat id:${req.params.id} from chat history`,
-      });
+    res.status(200).json({
+      message: `successfully deleted chat id:${req.params.id} from chat history`,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
 
@@ -85,7 +83,7 @@ export async function getmyallchats(req, res) {
       message: `successfully found all chathistor of ${req.params.username}`,
       getmychathistory: getmychathistory.map((i) => {
         //id to update chat history via updatechathistory
-        return { chatdata: i.chathistoryofuser, id: i._id };
+        return { chatdata: i.chathistoryofuser, id: i._id, time: i.createdAt };
       }),
     });
   } catch (error) {
@@ -96,7 +94,9 @@ export async function getmyallchats(req, res) {
 
 export async function getmyaccinfo(req, res) {
   try {
-    const getmydoc = await authmodel.findById(req.params.id);
+    const getmydoc = await authmodel
+      .findById(req.params.id)
+      .select("-password");
 
     if (!getmydoc) {
       return res
@@ -121,9 +121,11 @@ export async function savechats(req, res) {
       chathistoryofuser: req.body.chathistoryofuser,
     });
 
-    await create.save();
+    const newdoc = await create.save();
 
-    res.status(200).json({ message: "chats saved successfully" });
+    res
+      .status(200)
+      .json({ message: "chats saved successfully", savedid: newdoc._id });
   } catch (error) {
     res.status(500).json({ message: error.message });
     console.log(error);

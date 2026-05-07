@@ -29,21 +29,20 @@ export async function handleuserquery(userQ, history = null) {
           index: "vector_index",
           path: "vector",
           queryVector: queryVector,
-          numCandidates: 10,
-          limit: 10,
+          numCandidates: 8,
+          limit: 5,
         },
       },
     ]);
 
     //textmodel input of vector search result and raw user query
+    console.log(results.map((i) => i.text).join("end of this chunk"));
 
     let textmodelconfig;
 
     if (history) {
-      console.log(history);
-
       textmodelconfig = {
-        model: "openai/gpt-oss-120b:fastest",
+        model: "openai/gpt-oss-120b:fastes",
         messages: [
           {
             role: "system",
@@ -65,7 +64,7 @@ Use three sentences maximum and keep the answer concise.
       };
     } else {
       textmodelconfig = {
-        model: "openai/gpt-oss-120b:fastest",
+        model: "openai/gpt-oss-120b:fastes",
         messages: [
           {
             role: "system",

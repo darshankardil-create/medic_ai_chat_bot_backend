@@ -42,5 +42,3 @@ const io = new Server(httpserver, {
 });
 
 socketconnection(io);
-
-
