@@ -42,7 +42,7 @@ export async function handleuserquery(userQ, history = null) {
 
     if (history) {
       textmodelconfig = {
-        model: "openai/gpt-oss-120b:fastes",
+        model: "openai/gpt-oss-120b:fastest",
         messages: [
           {
             role: "system",
@@ -64,7 +64,7 @@ Use three sentences maximum and keep the answer concise.
       };
     } else {
       textmodelconfig = {
-        model: "openai/gpt-oss-120b:fastes",
+        model: "openai/gpt-oss-120b:fastest",
         messages: [
           {
             role: "system",
