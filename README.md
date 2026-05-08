@@ -65,6 +65,26 @@ Therefore, I chose the second approach to build this medical AI chatbot.
 
 ---
 
+# Two-Step Prompting
+
+The two-step prompting technique refines the LLM’s responses by first clarifying the user’s intent based on previous chat history. When a raw user query is received, the LLM makes a first pass to refine the query by considering earlier context. Once clarified, the query is embedded and sent into a vector search, which is crucial for retrieving the top 5 most relevant chunks. These chunks serve as the basis for the LLM to generate a final, standalone clarified question, which is then used to produce the precise answer.
+
+**Example:**
+
+1. User: "What are the symptoms of asthma?"
+
+2. User: "How can it be managed long term?"
+
+3. The LLM refines the query 
+
+4. The LLM returns the final question: "What are effective long-term strategies to manage and prevent asthma?"
+
+5. After clarification, the query is embedded and sent to vector search.
+
+6. The LLM generates a precise answer on the basis of top 5 retrieved chunks via vector search technique.
+
+
+
 ## Project Architecture
 
 1. **Seed Process**
