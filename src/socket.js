@@ -1,6 +1,6 @@
 import { handleuserquery } from "./mainfunction.js";
 
-export function socketconnection(io) {
+ export function socketconnection(io) {
   io.on("connection", (socket) => {
     console.log("user with id:", socket.id, "connected successfull via socket");
     //get history from user as parameter
