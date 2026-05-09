@@ -3,6 +3,12 @@
 ## Visit Live Website : https://medicaichatbotfrontend.vercel.app
 ## Frontend repository: https://github.com/darshankardil-create/medic_ai_chat_bot_frontend
 
+---
+
+### This LLM currently uses the Gale Encyclopedia of Medicine as a core information source to answer medical-related queries. It's built as a plug-and-play system, allowing users to integrate any custom data source they prefer. Once the data is provided, the model is ready to serve accurate, domain-specific answers with a simple npm run seed command.
+
+---
+
 ## Approach
 
 When I decided to create a medical AI chatbot, I had two options.
