@@ -56,18 +56,21 @@ Therefore, I chose the second approach to build this medical AI chatbot.
 
 ---
 
-## Tech Stack
+  ## Backend Tech Stack
 
-- **Backend Framework:** Express.js
+- **Backend Framework:** Node.js with Express.js
 - **Database:** MongoDB with Mongoose
-- **Authentication:** JWT (JSON Web Tokens)
-- **AI Embeddings:** Hugging Face Inference API (`BAAI/bge-large-en-v1.5`)
-- **Text Generation:** OpenAI-compatible model (`openai/gpt-oss-120b:fastest`)
+- **Vector Database:** MongoDB Vector Search
+- **Authentication & Security:** JWT (JSON Web Tokens), bcrypt, CORS
+- **AI Embeddings model:** Hugging Face Inference API (`BAAI/bge-large-en-v1.5`)
+- **natural language processing model :** OpenAI-compatible model (`openai/gpt-oss-120b:fastest`)
+
 - **Rate Limiting:** Upstash Redis + Upstash Ratelimit
-- **Real-Time Communication:** Socket.IO
+- **Socket.IO:** For Real-Time Communication
 - **Environment Variables:** dotenv
 - **PDF Processing:** pdf-parse-new
-- **Text Splitting:** LangChain RecursiveCharacterTextSplitter
+- **LangChain:**  RecursiveCharacterTextSplitter
+- **Utility Library:** lodash
 
 ---
 
@@ -197,6 +200,21 @@ http://localhost:3000
 ├── app.js
 └── seed.js
 ```
+---
+
+ ## 🔒 Security Implementation and Authentication
+
+In this backend, the project uses JSON Web Tokens (JWT) and bcrypt to enhance security.
+
+* **JSON Web Token (JWT)**: After a successful login or signin, a JWT is generated using a secret key. The payload of this token includes the user’s unique ID, allowing each request to identify which user is making it. This token is required for accessing any protected routes.
+
+* **bcrypt**: Passwords are hashed using bcrypt during signup so that no plain-text passwords are stored. During login, bcrypt compares the provided password to the stored hash, ensuring that only correct credentials allow access.
+
+* **`/signin` (POST)**: This endpoint registers a new user by hashing the password and storing the user details in the database.
+
+* **`/login` (POST)**: This endpoint verifies the user’s credentials using bcrypt. If successful, a JWT (including the user ID in the payload) is returned. This same endpoint is also used for account deletion after verifying the user’s identity.
+
+* **`/gettokenpayload` (GET)**: This endpoint decodes the JWT, verifies it, and returns the payload, confirming the user’s identity based on the user ID.
 ---
 
 ## Deployment
